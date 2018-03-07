@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  proxy:
+    build: nginx/
+    container_name: "portainer-proxy"
+    ports:
+      - "80:80"
+    networks:
+      - local
+
+  portainer:
+    image: portainer/portainer
+    container_name: "portainer-app"
+    command: --templates https://raw.githubusercontent.com/battlecl0ud/portainer_templates/master/portainer_template.yml --host=unix:///var/run/docker.sock
+    networks:
+      - local
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/portainer/data:/data
+
+networks:
+  local:
+    driver: bridge
+  haknet:
+    driver: bridge
